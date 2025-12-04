@@ -104,22 +104,24 @@ mv "Zpl-EscPos Printer.app" /Applications/
 
 ### Prérequis
 - **Node.js** 18+ (recommandé : 20 LTS)
-- **npm** ou **yarn**
+- **yarn** (recommandé) ou **npm**
 - **Git**
 
 ### Installation
 ```bash
 git clone https://github.com/KimBelanger/VelocePrinter.git
 cd VelocePrinter
-npm install
+yarn install  # ou: npm install
 ```
 
 ### Commandes
 ```bash
-npm start       # Mode développement avec logs
-npm run package # Package pour OS courant
-npm run make    # Générer binaires multi-OS
+yarn start       # Mode développement avec logs
+yarn package     # Package pour OS courant
+yarn make        # Générer binaires multi-OS
 ```
+
+*Équivalent npm :* `npm start`, `npm run package`, `npm run make`
 
 ### Tests Manuels (sans Véloce)
 ```bash
