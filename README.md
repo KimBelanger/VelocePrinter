@@ -248,6 +248,6 @@ DATA SIZE: 256 bytes
 
 ## 🔗 Liens Utiles
 
-- [Guide Véloce POS](https://veloce.ca) (système de point de vente)
+- [Guide Véloce POS](https://velocehq.com/) (système de point de vente)
 - [Protocole ESC/POS](https://en.wikipedia.org/wiki/ESC/P) (Wikipedia)
 - [RFC Imprimantes Réseau](https://www.ietf.org/rfc/rfc1179.txt) (LPD/LPR)
