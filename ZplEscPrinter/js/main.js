@@ -3,6 +3,7 @@ const createPopper = global.createPopper = require('@popperjs/core');
 const Bootstrap = global.Bootstrap = require('bootstrap');
 const { ipcRenderer } = require('electron');
 const fs = require('fs');;
+const path = require('path');
 const net = require('net');
 
 let clientSocketInfo;
@@ -180,6 +181,70 @@ async function zpl(data){
         }
     }
     return null;
+}
+
+/**
+ * Capture raw ESC/POS data as hexdump for analysis
+ * @param {Buffer} data - Raw ESC/POS data received from TCP
+ * @param {Object} socketInfo - Client connection info {peerAddress, peerPort}
+ * @returns {Promise<string>} Path to saved hexdump file
+ */
+async function captureHexdump(data, socketInfo) {
+    try {
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const sanitizedIp = socketInfo.peerAddress.replace(/:/g, '-');
+        const filename = `escpos_${timestamp}_${sanitizedIp}_${socketInfo.peerPort}.txt`;
+        const logsDir = path.join(__dirname, '../../logs/hexdumps');
+
+        // Ensure logs directory exists
+        if (!fs.existsSync(logsDir)) {
+            fs.mkdirSync(logsDir, { recursive: true });
+        }
+
+        // Generate hexdump content
+        let hexdump = '';
+        hexdump += '='.repeat(80) + '\n';
+        hexdump += `CAPTURE TIMESTAMP: ${new Date().toISOString()}\n`;
+        hexdump += `CLIENT: ${socketInfo.peerAddress}:${socketInfo.peerPort}\n`;
+        hexdump += `DATA SIZE: ${data.length} bytes\n`;
+        hexdump += '='.repeat(80) + '\n\n';
+
+        // Hexdump format: offset | hex bytes | ASCII
+        for (let i = 0; i < data.length; i += 16) {
+            const chunk = data.slice(i, i + 16);
+            const offset = i.toString(16).padStart(8, '0');
+
+            // Hex representation
+            const hex = Array.from(chunk)
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join(' ');
+            const hexPadded = hex.padEnd(47, ' '); // 16 bytes * 3 chars - 1
+
+            // ASCII representation (printable chars only)
+            const ascii = Array.from(chunk)
+                .map(b => (b >= 32 && b <= 126) ? String.fromCharCode(b) : '.')
+                .join('');
+
+            hexdump += `${offset}  ${hexPadded}  |${ascii}|\n`;
+        }
+
+        hexdump += '\n' + '='.repeat(80) + '\n';
+        hexdump += 'RAW BASE64 (for re-processing):\n';
+        hexdump += data.toString('base64') + '\n';
+        hexdump += '='.repeat(80) + '\n';
+
+        // Write to file
+        const filepath = path.join(logsDir, filename);
+        fs.writeFileSync(filepath, hexdump, 'utf8');
+
+        console.log(`[HEXDUMP] Captured ${data.length} bytes to: ${filename}`);
+        notify(`Hexdump capturé: <b>${filename}</b> (${data.length} bytes)`, 'floppy-disk', 'success', 3000);
+
+        return filepath;
+    } catch (error) {
+        console.error('[HEXDUMP ERROR]', error);
+        notify(`Erreur lors de la capture hexdump: ${error.message}`, 'exclamation-sign', 'warning');
+    }
 }
 
 /**
@@ -365,8 +430,12 @@ function startTcpServer() {
                 let response;
                 if ($('#isZpl').is(':checked'))
                     response = await zpl(code);
-                else
+                else {
+                    // Capture hexdump for analysis (Phase 1: Véloce POS integration)
+                    await captureHexdump(code, clientSocketInfo);
+                    // Continue normal processing (unchanged)
                     response = await escpos(code);
+                }
                 if (response) sock.write(response);
                 //console.log(response);
                 sock.end();
