@@ -1,0 +1,73 @@
+﻿@import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import "../../node_modules/glyphicons-only-bootstrap/css/bootstrap.min.css";
+
+::-webkit-scrollbar-thumb {
+    display: none;
+}
+
+.panel-heading-blur, .panel-heading-blur .card-header{
+    border-color: #215480 !important;
+}
+.panel-heading-blur .card-header{
+    background-color: #445da5 !important;
+}
+
+.label-container {
+    height: 82vh;
+}
+
+.label-zpl {
+    margin: 5px 0px 20px 5px;
+}
+
+.notifications .alert .glyphicon {
+    font-size: 1.45rem!important;
+}
+
+.notifications .alert .msg {
+    font-size: 0.75rem!important;
+}
+
+input[type=checkbox]._big, input[type=radio]._big, ._big>input[type=checkbox], ._big>input[type=radio] {
+    vertical-align: middle;
+    -ms-transform: scale(1.5);
+    -moz-transform: scale(1.5);
+    -webkit-transform: scale(1.5);
+    -o-transform: scale(1.5);
+    margin-top: 5px;
+    margin-right: 10px;
+}
+
+.escpos-col {
+    padding-right: 5px;
+    padding-left: 0;
+}
+.escpos-col > .col {
+    margin-right: 0;
+    padding-right: 0;
+    margin-bottom: 2px;
+    padding-left: 6px;
+}
+.escpos-col > .col label {
+    font-size: 11px;
+    line-height: 1;
+    font-weight: bold;
+    margin-left: -5px;
+    margin-top: 6px;
+}
+.escpos-col > .col .form-check {
+    min-height: auto !important;
+}
+.escpos-col > .col > div > span {
+    width: 100%;
+    padding: 0 0.3rem;
+    padding-bottom: 1px;
+}
+.escpos-col > .col input[type=checkbox]._big {
+    -ms-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    margin-top: .25em;
+    margin-right: 5px;
+}
