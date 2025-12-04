@@ -226,3 +226,4 @@ claude.md
 
 # Hexdump logs (not tracked in git)
 logs/
+.DS_Store
