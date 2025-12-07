@@ -149,7 +149,6 @@ VelocePrinter/
 │   └── hexdumps/              # 📁 Captures hexdump (non tracké git)
 │
 ├── _PLAN.md                    # Plan d'implémentation (tracké)
-├── claude.md                   # Notes développement (non tracké)
 └── README.md                   # Ce fichier
 ```
 
